@@ -1,0 +1,19 @@
+<h1>
+  {{title}}</h1>
+<input name="file" id='upfile' type='file' multiple/>
+<div id="target">
+  <!-- 上传生成的文件链接 -->
+</div>
+<script type="module">
+  import { Uploader } from './javascripts/Upload.js'
+  $('#upfile').on('change', function (e) {
+    let files = e.target.files
+    for (let i = 0; i < files.length; i++) {
+      Uploader.upload('cloudwalk-doc', files[0], function (url) {
+        $('#target').append(`<a href="${url}" 
+                              style="margin:10px 0;display:block;"
+                              target="_blank">${url}</a>`)
+      })
+    }
+  })
+</script>

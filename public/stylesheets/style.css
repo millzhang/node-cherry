@@ -1,0 +1,36 @@
+* {
+  margin: 0;
+  padding: 0;
+}
+
+body {
+  font: 14px 'Lucida Grande', Helvetica, Arial, sans-serif;
+}
+
+h1 {
+  text-align: center;
+}
+
+a {
+  color: #00b7ff;
+}
+
+.page-example {
+  padding: 20px;
+}
+
+.page-example ul {
+  margin-left: 20px;
+  list-style: decimal-leading-zero;
+}
+
+.page-example li {
+  margin: 10px 0;
+}
+
+#upfile {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+}
