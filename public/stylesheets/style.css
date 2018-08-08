@@ -20,7 +20,8 @@ a {
 }
 
 .page-example ul {
-  margin-left: 20px;
+  width: 500px;
+  margin: 20px auto;
   list-style: decimal-leading-zero;
 }
 

@@ -1,0 +1,155 @@
+<h1>{{title}}</h1>
+
+<link rel="stylesheet" href="/stylesheets/bootstrap.min.css" />
+<link rel="stylesheet" href="/stylesheets/bootstrap-theme.min.css" />
+<style>
+  * {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+  }
+
+
+  .wrap {
+    width: 100px;
+    height: 40px;
+    background-color: red;
+    text-align: center
+  }
+
+  .wrap p {
+
+    width: 100%;
+    height: 100%;
+    line-height: 2;
+    text-align: center;
+  }
+
+  #file {
+    position: absolute;
+    left: 0;
+    top: 0;
+    width: 100px;
+    height: 40px;
+    display: block;
+    opacity: 0;
+  }
+
+  .progress {
+    position: relative;
+  }
+
+  .progress-bar {
+    transition: width .3s ease
+  }
+
+  .progress .value {
+    position: absolute;
+    color: #FF9800;
+    left: 50%;
+  }
+
+  .container {
+    width: 500px;
+  }
+
+  .row {
+    border-bottom: 1px solid gray;
+    padding: 10px;
+  }
+
+  .hidden {
+    display: none;
+  }
+</style>
+
+<div class="container">
+  <div class="row">
+    <div class="col-md-4">点击上传按钮</div>
+    <div class="col-md-8">
+      <div class="wrap btn btn-default">
+        <input type="file" id="file" />
+        <p>上传文件</p>
+      </div>
+      <div class="btn btn-default" id="pauseButton">
+        暂停
+      </div>
+      <div class="btn btn-default" id="restartButton">
+        重新上传
+      </div>
+      <p id="progress"></p>
+    </div>
+  </div>
+  <div class="row" id="process1">
+    <div class="col-md-4">校验文件进度</div>
+    <div class="col-md-8">
+      <div class="progress">
+        <div id="checkProcessStyle" class="progress-bar" style="width:0%"></div>
+        <p id="checkProcessValue" class="value">0%</p>
+      </div>
+    </div>
+  </div>
+  <div class="row" id="process2">
+    <div class="col-md-4">上传文件进度</div>
+    <div class="col-md-8">
+      <div class="progress">
+        <div id="uploadProcessStyle" class="progress-bar" style="width:0%"></div>
+        <p id="uploadProcessValue" class="value">0%</p>
+      </div>
+    </div>
+  </div>
+</div>
+<script src="/javascripts/bootstrap.min.js"></script>
+<script src="/javascripts/spark-md5.min.js"></script>
+<script src="/javascripts/lib.js"></script>
+<script>
+  let uploader = null;
+  $("#file").on('change', function () {
+    let file = this.files[0]
+    uploader = new FileUploader(file, {
+      unique: false,
+      progress(code, progress) {
+        if (code == 1) {
+          $('#checkProcessStyle').css({
+            width: progress + '%'
+          })
+          $('#checkProcessValue').html(`${progress}%`)
+        }
+        if (code == 101) {
+          $('#uploadProcessStyle').css({
+            width: progress + '%'
+          })
+          $('#uploadProcessValue').html(`${progress}%`)
+        }
+      },
+      getSpeed(speed) {
+        $('#progress').html(speed)
+      },
+      complete(obj) {
+        console.log('开始合并')
+        let url = `/merge?md5=${obj.md5}&fileName=${obj.name}&size=${
+          obj.size
+          }`
+        $.getJSON(url, function (data) {
+          alert('上传成功')
+        })
+      }
+    })
+    uploader.run();
+  })
+
+  $('#pauseButton').off('click').on('click', function (e) {
+    $(this).toggleClass('pause')
+    if ($(this).hasClass('pause')) {
+      uploader.pause()
+      $(this).html('继续')
+    } else {
+      uploader.continue()
+      $(this).html('暂停')
+    }
+  })
+
+  $('#restartButton').off('click').on('click', function (e) {
+    uploader.restart()
+  })
+</script>
