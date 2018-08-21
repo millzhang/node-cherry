@@ -27,6 +27,11 @@ router.get('/brokenupload', (req, res, next) => {
   res.render('brokenupload', { title: '断点续传' })
 })
 
+// anime.js
+router.get('/anime', (req, res, next) => {
+  res.render('anime', { title: 'Anime.js' })
+})
+
 // 上传文件
 router.post('/upload', (req, res) => {
   var form = new formidable.IncomingForm({

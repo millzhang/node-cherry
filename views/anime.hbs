@@ -1,0 +1,221 @@
+<style>
+  .demo {}
+
+  .square {
+    pointer-events: none;
+    position: relative;
+    width: 80px;
+    height: 80px;
+    margin: 10px;
+    color: #fff;
+    background-color: #FF1461;
+    font-size: 18px;
+    text-align: center;
+    line-height: 80px;
+  }
+
+  .green {
+    color: #1CE2B2;
+    background-color: currentColor;
+  }
+
+  .small {
+    width: 40px;
+    height: 40px;
+    line-height: 40px;
+  }
+
+  .circle {
+    border-radius: 50%;
+  }
+
+  .trangle {
+    width: 0;
+    height: 0;
+    border-style: solid;
+    border-width: 0 14px 24px 14px;
+    border-color: transparent transparent currentColor transparent;
+  }
+
+  #button {
+    width: 120px;
+    height: 40px;
+    margin: 20px 20px 20px auto;
+    display: block;
+    position: fixed;
+    right: 0;
+    top: 0;
+    z-index: 1001;
+  }
+</style>
+<section class="demo">
+  <button id="button">启动</button>
+  <div class="square el"></div>
+  <hr>
+  <div class="square el2"></div>
+  <hr>
+  <div class="square el3"></div>
+  <hr>
+  <div class="square el4">0</div>
+  <hr>
+  <div class="square el5"></div>
+  <hr>
+  <div class="square small el6"></div>
+  <div class="square small el6"></div>
+  <hr>
+  <div class="square green small el7"></div>
+  <div class="square green small el7"></div>
+  <hr>
+  <div class="square green trangle small el8"></div>
+  <hr>
+  <div class="square green trangle small el9"></div>
+  <div class="square green circle small el10"></div>
+</section>
+<script src="https://cdn.bootcss.com/animejs/2.2.0/anime.min.js"></script>
+<script>
+  $(function () {
+    let demos = []
+    $('#button').click(function (e) {
+      e.preventDefault()
+      reset()
+
+      // 时间线
+      let timeline = anime.timeline()
+      timeline
+        .add({
+          targets: '.el9',
+          translateX: window.innerWidth * 0.8,
+          easing: 'easeOutExpo',
+          duration: 2000
+        })
+        .add({
+          targets: '.el10',
+          translateX: window.innerWidth * 0.9,
+          easing: 'easeOutExpo',
+          duration: 2000,
+          backgroundColor: '#bc23d4',
+          offset: '-=1000'
+        })
+      demos.push(timeline)
+
+      // 跑道
+      let pao = anime({
+        targets: '.el8',
+        translateX: [
+          { value: 1250, duration: 5000, delay: 500, elasticity: 0 },
+          { value: 0, duration: 5000, delay: 500, elasticity: 0 }
+        ],
+        translateY: [
+          { value: -90, duration: 500, elasticity: 100 },
+          { value: 90, duration: 500, delay: 1000, elasticity: 100 },
+          { value: 0, duration: 500, delay: 1000, elasticity: 100 }
+        ],
+      })
+      demos.push(pao)
+
+      // random
+      let random = anime({
+        targets: '.el7',
+        direction: 'alternate',
+        loop: true,
+        translateX: function (el, i) {
+          return 150 + (150 * i);
+        },
+        translateY: function (el, i) {
+          return 50 + (-50 * i);
+        },
+        scale: function (el, i, l) {
+          return (l - i) + .25;
+        },
+        rotate: function () { return anime.random(-360, 360); },
+        duration: function () { return anime.random(1200, 1800); },
+      })
+      demos.push(random)
+
+      let elasticity = anime({
+        targets: '.el6',
+        translateX: window.innerWidth * 0.3,
+        direction: 'alternate',
+        loop: 3,
+        duration: function (el, i, l) {
+          return 1000 + (i * 1000);
+        },
+        elasticity: function (el, i, l) {
+          return (300 + i * 300);
+        }
+      })
+      demos.push(elasticity)
+
+      // 旋转缩放
+      let scale = anime({
+        targets: '.el5',
+        translateX: {
+          value: window.innerWidth * 0.5,
+          duration: 3000
+        },
+        scale: {
+          value: [1, 1.2, 2, 1.2, 1],
+          duration: 4500
+        },
+        rotate: {
+          value: 360,
+          duration: 4000
+        }
+      })
+      demos.push(scale)
+
+      // 数字变更
+      let obj = { process: 0 }
+      let number = anime({
+        targets: obj,
+        process: '100%',
+        easing: 'linear',
+        round: 1,//保留整数
+        duration: 3000,
+        update: function () {
+          var el = document.querySelector('.el4');
+          el.innerHTML = obj.process
+        }
+      });
+      demos.push(number)
+
+      //背景色
+      let bg = anime({
+        targets: '.el3',
+        opacity: .5,
+        easing: 'easeInOutQuad',
+        backgroundColor: '#bc23d4',
+        borderRadius: ['0', '50%'],
+        translateX: window.innerWidth * 0.5,
+        duration: function (el, i, l) {
+          return 1000 + (i * 1000);
+        }
+      });
+      demos.push(bg)
+
+      // 线性过渡
+      let linear = anime({
+        targets: '.el2',
+        opacity: .5,
+        easing: 'linear',
+        translateX: window.innerWidth * 0.5
+      });
+      demos.push(linear)
+
+      let common = anime({
+        targets: '.el',
+        translateX: window.innerWidth * 0.5
+      });
+      demos.push(common)
+    })
+
+    function reset() {
+      demos.forEach(function (demo) {
+        demo.pause();
+        demo.seek(0);
+      });
+      demos = []
+    }
+  })
+
+</script>
