@@ -4,6 +4,7 @@
 <head>
   <title>{{title}}</title>
   <link rel='stylesheet' href='/stylesheets/style.css' />
+  <link rel="stylesheet" href="/stylesheets/github-markdown.css">
   <script src="https://cdn.bootcss.com/jquery/3.0.0/jquery.min.js"></script>
   <script src="https://cdn.bootcss.com/aws-sdk/2.247.1/aws-sdk.min.js" type="module"></script>
   <script src="https://cdn.bootcss.com/node-uuid/1.4.8/uuid.min.js" type="module"></script>
@@ -16,8 +17,18 @@
     <a href="/" class="back"></a>
     <h1>{{title}}</h1>
   </header>
-  <main>
-    {{{body}}}
+  <main class="main">
+    {{#if content}}
+    <div class="markdown-body">
+      {{{content}}}
+    </div>
+    {{/if}} {{#if readonly}}
+    <!-- no article -->
+    {{else}}
+    <div class="show-example">
+      {{{body}}}
+    </div>
+    {{/if}}
   </main>
 </body>
 

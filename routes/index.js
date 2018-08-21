@@ -1,35 +1,37 @@
 var express = require('express')
 var router = express.Router()
 var path = require('path')
+var marked = require('marked')
 
 let formidable = require('formidable')
 let fs = require('fs-extra')
+let fs0 = require('fs')
 let concat = require('concat-files')
 let opn = require('opn')
 let uploadDir = 'files/chunks'
+let routers = require('../public/javascripts/router')
+
 /* GET home page. */
 router.get('/', function(req, res, next) {
-  res.render('index', { title: 'Examples' })
+  res.render('index', { title: 'Examples', navList: routers })
 })
 
-// 文件上传
-router.get('/fileupload', (req, res, next) => {
-  res.render('fileupload', { title: 'AWS文件批量上传' })
-})
-
-// 文件夹上传
-router.get('/folderupload', (req, res, next) => {
-  res.render('folderupload', { title: 'AWS指定目录文件批量上传' })
-})
-
-// 断点续传
-router.get('/brokenupload', (req, res, next) => {
-  res.render('brokenupload', { title: '断点续传' })
-})
-
-// anime.js
-router.get('/anime', (req, res, next) => {
-  res.render('anime', { title: 'Anime.js' })
+routers.map(item => {
+  router.get(`/${item.url}`, (req, res, next) => {
+    if (item.article) {
+      let article = path.join(__dirname, `../markdown/${item.article}`)
+      fs0.readFile(article, function(err, data) {
+        var html = marked(data.toString())
+        res.render(item.url, {
+          title: item.name,
+          content: html,
+          readonly: item.readonly
+        })
+      })
+    } else {
+      res.render(item.url, { title: item.name })
+    }
+  })
 })
 
 // 上传文件
@@ -47,12 +49,15 @@ router.post('/upload', (req, res) => {
       let destFile = path.resolve(folder, fields.index)
       console.log('temp path', file.data.path)
       console.log('目标目录：', destFile)
-      copyFile(file.data.path, destFile).then(successLog => {
+      copyFile(file.data.path, destFile).then(
+        successLog => {
           console.log(successLog)
           res.send({ stat: 1, desc: index })
-        }, errorLog => {
+        },
+        errorLog => {
           res.send({ stat: 0, desc: 'Error' })
-        })
+        }
+      )
     })
   })
   // 文件夹是否存在, 不存在则创建文件

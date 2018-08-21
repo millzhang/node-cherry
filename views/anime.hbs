@@ -84,13 +84,13 @@
       timeline
         .add({
           targets: '.el9',
-          translateX: window.innerWidth * 0.8,
+          translateX: 250,
           easing: 'easeOutExpo',
           duration: 2000
         })
         .add({
           targets: '.el10',
-          translateX: window.innerWidth * 0.9,
+          translateX: 300,
           easing: 'easeOutExpo',
           duration: 2000,
           backgroundColor: '#bc23d4',
@@ -102,8 +102,8 @@
       let pao = anime({
         targets: '.el8',
         translateX: [
-          { value: 1250, duration: 5000, delay: 500, elasticity: 0 },
-          { value: 0, duration: 5000, delay: 500, elasticity: 0 }
+          { value: 350, duration: 2000, delay: 500, elasticity: 0 },
+          { value: 0, duration: 2000, delay: 500, elasticity: 0 }
         ],
         translateY: [
           { value: -90, duration: 500, elasticity: 100 },
@@ -134,7 +134,7 @@
 
       let elasticity = anime({
         targets: '.el6',
-        translateX: window.innerWidth * 0.3,
+        translateX: 200,
         direction: 'alternate',
         loop: 3,
         duration: function (el, i, l) {
@@ -150,7 +150,7 @@
       let scale = anime({
         targets: '.el5',
         translateX: {
-          value: window.innerWidth * 0.5,
+          value: 250,
           duration: 3000
         },
         scale: {
@@ -186,7 +186,7 @@
         easing: 'easeInOutQuad',
         backgroundColor: '#bc23d4',
         borderRadius: ['0', '50%'],
-        translateX: window.innerWidth * 0.5,
+        translateX: 300,
         duration: function (el, i, l) {
           return 1000 + (i * 1000);
         }
@@ -198,13 +198,13 @@
         targets: '.el2',
         opacity: .5,
         easing: 'linear',
-        translateX: window.innerWidth * 0.5
+        translateX: 300
       });
       demos.push(linear)
 
       let common = anime({
         targets: '.el',
-        translateX: window.innerWidth * 0.5
+        translateX: 300
       });
       demos.push(common)
     })

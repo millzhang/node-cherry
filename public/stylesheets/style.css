@@ -64,6 +64,18 @@ header .back {
   left: 40px;
   top: 50%;
 }
-main {
+main.main {
   padding-top: 90px;
+  display: flex !important;
+}
+
+main:after {
+  content: '';
+  clear: both;
+  display: block;
+}
+
+.show-example {
+  flex: 1;
+  border-left:1px solid #cccccc;
 }
